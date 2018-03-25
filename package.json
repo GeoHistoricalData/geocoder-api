@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/GeoHistoricalData/geocoder-api/issues"
   },
-  "homepage": "https://github.com/GeoHistoricalData/geocoder-api#readme"
+  "homepage": "https://github.com/GeoHistoricalData/geocoder-api#readme",
+  "dependencies": {
+    "restify-errors": "^6.0.0"
+  }
 }
