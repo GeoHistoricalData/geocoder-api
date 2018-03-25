@@ -33,7 +33,7 @@ server.pre((req, res, next) => {
 /**
 *  Requests handling
 */
-server.get('/api/geocode', (req, res, next) => {
+server.get('/geocode', (req, res, next) => {
   res.send(200);
   return next();
 });   
@@ -43,3 +43,5 @@ server.get('/api/geocode', (req, res, next) => {
 server.listen(config.port, function() {
   console.log('%s listening at %s', server.name, server.url);
 });
+
+module.exports = server;
