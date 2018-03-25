@@ -15,11 +15,18 @@ const server = restify.createServer({
   version: config.version,
 });
 
+
+/**
+* Load plugins
+*/
+server.use(restify.plugins.queryParser());
+
+
 /**
 *  Middleware
 */
 server.pre((req, res, next) => {
-  console.info(`${req.method} - ${req.url}`);
+  console.info(`${req.method} - ${req.url} - ${req.query}`);
   return next();
 });
 
