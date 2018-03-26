@@ -28,8 +28,7 @@ class GeocoderServer {
 
   _createRoutes(){
 
-    this._server.get('/geocode', (req, res, next) => {
-      
+    this._server.get({url: '/geocode'},(req, res, next) => {
       let sql=`SELECT rank::text,
                   $<query_addr>||';'||$<query_date> AS input_adresse_query,
                   historical_name::text,
@@ -53,7 +52,7 @@ class GeocoderServer {
                                                               query_adress:=$<query_addr>,
                                                               query_date:= sfti_makesfti($<query_date>::integer),
                                                               use_precise_localisation:= $<do_precise_geocoding>::integer::boolean ,
-                                                              max_number_of_candidates:=$<max_candidates>::integer
+                                                              max_number_of_candidates:=$<max_results>::integer
                                                             ) As f
             LEFT OUTER JOIN geohistorical_object.historical_source AS hs 
             ON (hs.short_name = f.historical_source),
@@ -65,7 +64,7 @@ class GeocoderServer {
             query_addr: req.query.address,
             query_date: req.query.date,
             do_precise_geocoding: req.query.precise,
-            max_candidates: req.query.maxresults,
+            max_results: req.query.maxresults,
         })
         .then(data => {
             res.send(200,data);
