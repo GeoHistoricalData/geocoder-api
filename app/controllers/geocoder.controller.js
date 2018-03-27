@@ -4,7 +4,12 @@ class GeocoderController {
 
   create(){};
 
-  retrieve(params = {adress: 'paris', date: '2018', precise: '1', maxresults: '1' }, model = {}, callback = () => {}){
+  retrieve(params = {}, model = {}, callback = () => {}){ 
+    let address = params.address || ' Paris',
+        date = params.date || ' 1900',
+        precise = params.date || ' 1',
+        maxresults = params.maxresults || ' 1';
+    
     let sql=`SELECT rank::text,
             $<query_addr>||';'||$<query_date> AS input_adresse_query,
             historical_name::text,
@@ -36,10 +41,10 @@ class GeocoderController {
       ;`;
     model.any(sql,
     {
-        query_addr: params.address,
-        query_date: params.date,
-        do_precise_geocoding: params.precise,
-        max_results: params.maxresults,
+        query_addr: address,
+        query_date: date,
+        do_precise_geocoding: precise,
+        max_results: maxresults,
     })
     .then(data => {
       callback({ code: 200, body: data });

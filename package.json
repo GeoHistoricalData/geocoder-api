@@ -19,6 +19,7 @@
   "homepage": "https://github.com/GeoHistoricalData/geocoder-api#readme",
   "dependencies": {
     "express": "^4.16.3",
+    "express-validator": "^5.0.3",
     "pg-promise": "^8.2.2"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@ class Geocoder {
     
     this._server = express();
 
-    /* Connection to the in-database application*/
+    /* Connection to the in-database application */
     const initOptions = {};
     this._db = pgp(initOptions)(cfg.db);  
     
