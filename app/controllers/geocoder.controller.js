@@ -43,7 +43,7 @@ class GeocoderController {
         max_results: params.maxresults,
     })
     .then(data => {
-      callback({ code: 200, data: data });
+      callback({ code: 200, body: data });
     })
     .catch(error => {
         console.log('ERROR:', error);
