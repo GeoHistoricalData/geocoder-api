@@ -34,7 +34,6 @@ class GeocoderController {
       ON (hs.short_name = f.historical_source),
           ST_SnapToGrid(geom,0.01) AS geom2
       ;`;
-
     model.any(sql,
     {
         query_addr: params.address,
