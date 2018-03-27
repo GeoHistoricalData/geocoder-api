@@ -1,14 +1,15 @@
 const restify = require('restify');
 const errors = require('restify-errors');
 const ctrlGeocoder = require('./controllers/geocoder.controller.js');
-const pgp = require('pg-promise')({});
+const pgp = require('pg-promise'); 
 
 class GeocoderServer {
   
   constructor(cfg = { name: 'default', version: '1.0', db: {} }){
-    let srv = this._server;
     
-    srv =  restify.createServer({
+    this._cfg = cfg;
+
+    let srv = this._server = restify.createServer({
       name: cfg.name,
       version: cfg.version
     });
@@ -20,18 +21,26 @@ class GeocoderServer {
       return next();
     });
 
-    srv.listen(cfg.port, () => {
-      console.log('%s listening at %s', srv.name, srv.url);
-    });
-
-    this._database = pgp(cfg.db);
-
+    
+    /** Connect to the geocoder database */
+    const initOptions = {};
+    this._database = pgp(initOptions)(cfg.db);  
+    
+    /** Create the API routes*/
     this._createRoutes();
   };
 
   _createRoutes(){
 
     this._server.get('/geocode', (req, res, next) => {
+      if (!req.query.date){
+        return next(new errors.MissingParameterError('Parameter date is missing.'));
+      };
+
+      if (!req.query.address){
+        return next(new errors.MissingParameterError('Parameter address is missing.'));
+      };
+
       //TODO Avoid passing the db connection to controllers on every call.
       ctrlGeocoder.retrieve(req.query, this._database, (response) => { res.send(response.code, response.body) }); 
       return next();
@@ -41,6 +50,19 @@ class GeocoderServer {
       return next( new  errors.BadRequestError());  
     });
   };
+
+  start( next, err ){
+    try{
+      const srv = this._server;
+      srv.listen(this._cfg.port, () => {
+        console.log('%s listening at %s', srv.name, srv.url);
+      });
+    }catch(error){
+      err(error);
+    };
+    return next();
+  };
+
 };
 
 // Classes aren't hoisted so we need to wrap them in a function unless we return an instance.
