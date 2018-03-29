@@ -1,30 +1,21 @@
 {
-  "name": "geocoder-api",
+  "name": "historical-geocoder-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Historical geocoder API.  You can find out more at [http://geohistoricaldata.org](http://geohistoricaldata.org).",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha",
+    "prestart": "npm install",
     "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GeoHistoricalData/geocoder-api.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/GeoHistoricalData/geocoder-api/issues"
-  },
-  "homepage": "https://github.com/GeoHistoricalData/geocoder-api#readme",
+  "keywords": [
+    "swagger"
+  ],
+  "license": "Unlicense",
+  "private": true,
   "dependencies": {
-    "express": "^4.16.3",
-    "express-validator": "^5.0.3",
-    "pg-promise": "^8.2.2"
-  },
-  "devDependencies": {
-    "mocha": "^5.0.5",
-    "nodemon": "^1.17.2",
-    "supertest": "^3.0.0"
+    "connect": "^3.2.0",
+    "js-yaml": "^3.3.0",
+    "pg-promise": "^8.2.2",
+    "swagger-tools": "0.10.1"
   }
 }
