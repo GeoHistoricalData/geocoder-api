@@ -1,23 +1,20 @@
 'use strict';
 
+
 const pgp = require('pg-promise')({});
 const config = require('../config');
-
 const model = pgp(config.db);
+
 
 /**
  * Geocode an adress at a given date.
  * Some description.
  *
- * address String The address to geocode. For example : '15 rue du Temple, Paris'. 
- * date Integer A year 
- * precise Boolean 1 or 0 
- * maxresults Integer A positive integer 
+ * body List  (optional)
  * no response value expected for this operation
  **/
-exports.geocode = function(address,date,precise,maxresults) {
-
-  console.log('Address ->'+address);
+exports.geocode = function(body) {
+  
   let sql=`SELECT rank::text,
           $<query_addr>||';'||$<query_date> AS input_adresse_query,
           historical_name::text,
@@ -47,12 +44,14 @@ exports.geocode = function(address,date,precise,maxresults) {
     ON (hs.short_name = f.historical_source),
         ST_SnapToGrid(geom,0.01) AS geom2
     ;`;
+  
+  return model.tx(t => {
+        return t.batch(body.map(q => t.any(sql,{
+            query_addr: q.address,
+            query_date: q.date,
+            do_precise_geocoding: q.precision,
+            max_results: q.maxresults  
+        })));
+    })
+}
 
-  return model.any(sql,
-  {
-      query_addr: address,
-      query_date: date,
-      do_precise_geocoding: precise,
-      max_results: maxresults,
-  });
-};

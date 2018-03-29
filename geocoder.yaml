@@ -1,11 +1,11 @@
 swagger: "2.0"
 info:
-  description: "Historical geocoder API.  You can find out more at [http://geohistoricaldata.org](http://geohistoricaldata.org)."
+  description: "Historical geocoder API.  You can find out more at [http://geohistoricaldata.org](http://geohistoricaldata.org"
   version: "1.0.0"
   title: "Historical Geocoder API"
   termsOfService: ""
   contact:
-    email: "help@geohistoricaldata.org"
+    email: "contact@geohistoricaldata.org"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -13,51 +13,61 @@ host: "localhost:8080"
 basePath: "/"
 tags:
 - name: "geocoding"
-  description: "A simple way yo geocode a spatial reference."
+  description: "A simple way to geocode a historical address."
   externalDocs:
     description: "Find out more"
     url: "http://geohistoricaldata.org"
 schemes:
 - "http"
 paths:
+  #GeocodingSet
+  #CREATE
   /geocoding:
-    get:
+    post:
       tags:
       - "geocoding"
       summary: "Geocode an adress at a given date."
       description: "Some description."
       operationId: "geocode"
+      consumes:
+      - "application/xml"
+      - "application/json"
+      - "text/csv"
+      - "multipart/form-data"
       produces:
       - "application/xml"
       - "application/json"
-      parameters:
-      - name: "address"
-        in: "query"
-        description: "The address to geocode. For example : '15 rue du Temple, Paris'. "
-        required: true
-        type: "string"
-        default: "Paris"
-      - name: "date"
-        in: "query"
-        description: "A year "
-        required: true
-        type: "integer"
-        default: "1900"
-      - name: "precise"
-        in: "query"
-        description: "1 or 0 "
-        required: true
-        type: "boolean"
-        default: "true"
-      - name: "maxresults"
-        in: "query"
-        description: "A positive integer "
-        required: true
-        type: "integer"
-        default: "1"
+      - "text/csv"
+      parameters: 
+      - in: "body"
+        name: "body"
+        schema: {
+          type: "array",
+          items: {
+            $ref: "#/definitions/GHObject"  
+          }
+        }
       responses:
         200:
           description: "A set of geocoding candidates matching the queried address."
         400:
           description: "Invalid geocoding."
-      
+definitions:
+  GHObject:
+      type: "object"
+      required:
+      - "address"
+      - "date"
+      properties:
+        address:
+          type: "string"
+          example: "1 rue du Temple, Paris"
+        date:
+          type: "integer"
+          example: "1850"
+        precision:
+          type: "boolean"
+        maxresults:
+          type: "integer"
+      xml:
+        name: "GHObject"
