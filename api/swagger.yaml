@@ -1,9 +1,10 @@
 ---
 swagger: "2.0"
 info:
-  description: "Historical geocoder API.  You can find out more at [http://geohistoricaldata.org](http://geohistoricaldata.org"
+  description: "A simple API to access the data and services of the project GeohistoricalData.\
+    \ Find out more at [http://geohistoricaldata.org/api/docs](http://geohistoricaldata.org/api/docs)"
   version: "1.0.0"
-  title: "Historical Geocoder API"
+  title: "GeohistoricalData API"
   termsOfService: ""
   contact:
     email: "contact@geohistoricaldata.org"
@@ -11,13 +12,14 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:8080"
-basePath: "/"
+basePath: "/api"
 tags:
 - name: "geocoding"
-  description: "A simple way to geocode a historical address."
+  description: "Take one or several addresses to geocode and associate them with a\
+    \ geohistorical object."
   externalDocs:
     description: "Find out more"
-    url: "http://geohistoricaldata.org"
+    url: "http://geohistoricaldata.org/api/docs/geocoding"
 schemes:
 - "http"
 paths:
@@ -31,12 +33,9 @@ paths:
       consumes:
       - "application/xml"
       - "application/json"
-      - "text/csv"
-      - "multipart/form-data"
       produces:
       - "application/xml"
       - "application/json"
-      - "text/csv"
       parameters:
       - in: "body"
         name: "body"
@@ -52,6 +51,16 @@ paths:
           description: "Invalid geocoding."
       x-swagger-router-controller: "Geocoding"
 definitions:
+  Error:
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      message:
+        type: "string"
   GHObject:
     type: "object"
     required:
@@ -66,6 +75,7 @@ definitions:
         example: 1850
       precision:
         type: "boolean"
+        default: true
       maxresults:
         type: "integer"
     xml:
