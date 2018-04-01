@@ -15,7 +15,7 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 tags:
   - name: "geocoding"
-    description: "Take one or several addresses to geocode and associate them with a geohistorical object."
+    description: "Geocode a set of pairs <Address, Date>."
     externalDocs:
       description: "Find out more"
       url: "http://geohistoricaldata.org/api/docs/geocoding"
@@ -31,19 +31,15 @@ paths:
       operationId: "geocode"
       consumes:
       - "application/json"
-      - "application/xml"
+      #- "application/xml" #Temporarily disabled: objects encoded in XML  don't pass the validator...
       produces:
       - "application/json"
-      - "application/xml"
+      #- "application/xml" #Temporarily disabled: objects encoded in XML  don't pass the validator...
       parameters: 
       - in: "body"
         name: "body"
-        schema: {
-          type: "array",
-          items: {
-            $ref: "#/definitions/GHObject"  
-          }
-        }
+        schema: 
+          $ref: "#/definitions/GeocodingQuerySet"  
       responses:
         200:
           description: "Success"
@@ -62,23 +58,39 @@ definitions:
         format: int32
       message:
         type: string
+        
+  GeocodingQuerySet:
+      type: "array"
+      xml:
+        name: "queryset"
+        wrapped: true
+      minItems: 1        
+      items:
+        $ref: "#/definitions/GHObject"
+        
   GHObject:
       type: "object"
+      xml:
+        name: "geohistorical-object"
       required:
-      - "address"
-      - "date"
+        - "address"
+        - "date"
       properties:
         address:
           type: "string"
           example: "1 rue du Temple, Paris"
         date:
           type: "integer"
-          example: "1850"
+          example: 1850
         precision:
           type: "boolean"
           default: true
+          example: true
+          xml:
+            name: "precise-geocoding"
         maxresults:
           type: "integer"
           default: 1
-      xml:
-        name: "GHObject"
+          example: 1
+          xml:
+            name: "max-results"
