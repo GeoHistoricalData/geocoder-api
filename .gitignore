@@ -1,3 +1,5 @@
 node_modules/
 .swagger-codegen/
 
+# The file storing the prepared queries is generated automatically when the server starts.
+db/prepared-sql.js
