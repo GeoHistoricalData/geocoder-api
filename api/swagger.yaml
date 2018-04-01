@@ -25,17 +25,18 @@ schemes:
 paths:
   /geocoding:
     post:
+      x-swagger-router-controller: "Geocoding"
       tags:
       - "geocoding"
       summary: "Geocode an adress at a given date."
       description: "Some description."
       operationId: "geocode"
       consumes:
+      - "application/json"  
       - "application/xml"
-      - "application/json"
       produces:
-      - "application/xml"
       - "application/json"
+      - "application/xml"
       parameters:
       - in: "body"
         name: "body"
@@ -46,10 +47,11 @@ paths:
             $ref: "#/definitions/GHObject"
       responses:
         200:
-          description: "A set of geocoding candidates matching the queried address."
+          description: "Success"
         400:
-          description: "Invalid geocoding."
-      x-swagger-router-controller: "Geocoding"
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
 definitions:
   Error:
     required:
@@ -61,6 +63,7 @@ definitions:
         format: "int32"
       message:
         type: "string"
+        default: "Something bad happened"
   GHObject:
     type: "object"
     required:

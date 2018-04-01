@@ -1,9 +1,9 @@
 'use strict';
 
-
 const pgp = require('pg-promise')({});
+
 const config = require('../config');
-const model = pgp(config.db);
+const db = pgp(config.db);
 
 
 /**
@@ -16,7 +16,7 @@ const model = pgp(config.db);
 exports.geocode = function(body) {
   
   let sql=`SELECT rank::text,
-          $<query_addr>||';'||$<query_date> AS input_adresse_query,
+          '$<query_addr:value>, $<query_date:value>' AS input_adresse_query,
           historical_name::text,
           normalised_name::text,
           sfti2daterange(COALESCE(f.specific_fuzzy_date,hs.default_fuzzy_date)) AS fuzzy_date,
@@ -45,14 +45,19 @@ exports.geocode = function(body) {
         ST_SnapToGrid(geom,0.01) AS geom2
     ;`;
   
-  return model.tx(t => {
-        return t.batch(body.map(q => t.any(sql,{
+  return db.tx('geocoding-transaction', t => {
+    let queries = body.map(q => t.any(sql,{
             query_addr: q.address,
             query_date: q.date,
             do_precise_geocoding: q.precision,
             max_results: q.maxresults  
-        })));
-    })
+        }).catch(error => {
+          console.error(`SQL ERR: ${error}`);
+          return [];
+        })
+    );
+    return t.batch(queries);
+  });
 }
 
 
