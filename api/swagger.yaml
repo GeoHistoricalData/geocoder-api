@@ -25,14 +25,13 @@ schemes:
 paths:
   /geocoding:
     post:
-      x-swagger-router-controller: "Geocoding"
       tags:
       - "geocoding"
       summary: "Geocode an adress at a given date."
       description: "Some description."
       operationId: "geocode"
       consumes:
-      - "application/json"  
+      - "application/json"
       - "application/xml"
       produces:
       - "application/json"
@@ -52,6 +51,7 @@ paths:
           description: "Bad request"
           schema:
             $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Geocoding"
 definitions:
   Error:
     required:
@@ -63,7 +63,6 @@ definitions:
         format: "int32"
       message:
         type: "string"
-        default: "Something bad happened"
   GHObject:
     type: "object"
     required:

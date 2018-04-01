@@ -30,11 +30,11 @@ paths:
       description: "Some description."
       operationId: "geocode"
       consumes:
-      - "application/xml"
       - "application/json"
+      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
+      - "application/xml"
       parameters: 
       - in: "body"
         name: "body"
@@ -46,9 +46,11 @@ paths:
         }
       responses:
         200:
-          description: "A set of geocoding candidates matching the queried address."
+          description: "Success"
         400:
-          description: "Invalid geocoding."
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
 definitions:
   Error:
     required:
