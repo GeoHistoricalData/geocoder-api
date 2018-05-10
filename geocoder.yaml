@@ -1,6 +1,6 @@
 swagger: '2.0'
 host: "localhost:8080"
-basePath: "/api"
+basePath: "/"
 schemes:
   - http
 info:
@@ -18,28 +18,27 @@ tags:
     description: "Geocode a set of pairs <Address, Date>."
     externalDocs:
       description: "Find out more"
-      url: "http://geohistoricaldata.org/api/docs/geocoding"
+      url: "http://api.geohistoricaldata.org/docs"
 paths:
-  #GeocodingSet
-  #CREATE
   /geocoding:
+    #Method POST is used for batch geocoding of multiples addresses
     post:
       tags:
-      - "geocoding"
+      - "Geocoding"
       summary: "Geocode an adress at a given date."
       description: "Some description."
-      operationId: "geocode"
+      operationId: "geocodePOST"
       consumes:
       - "application/json"
-      #- "application/xml" #Temporarily disabled: objects encoded in XML  don't pass the validator...
       produces:
       - "application/json"
-      #- "application/xml" #Temporarily disabled: objects encoded in XML  don't pass the validator...
       parameters: 
       - in: "body"
         name: "body"
-        schema: 
-          $ref: "#/definitions/GeocodingQuerySet"  
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/GeocodingQuery"
       responses:
         200:
           description: "Success"
@@ -47,6 +46,39 @@ paths:
           description: "Bad request"
           schema:
             $ref: "#/definitions/Error"
+    #Method GET allows for a single geocoding request of an address
+    get:
+      tags:
+      - "Geocoding"
+      summary: "Geocode an adress at a given date."
+      description: "Some description."
+      operationId: "geocodeGET"
+      parameters:
+        - in: "query"
+          name: "address"
+          type: "string"
+          default: "12 rue du temple"
+        - in: "query"
+          name: "date"
+          type: "integer"
+          default: 1850
+        - in: "query"          
+          name: precision
+          type: "boolean"
+          default: true
+        - in: query
+          name: "maxresults"
+          type: "integer"
+          default: 1
+      responses:
+        200:
+          description: "Success"
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Geocoding"
+
 definitions:
   Error:
     required:
@@ -59,7 +91,7 @@ definitions:
       message:
         type: string
         
-  GeocodingQuerySet:
+  GeocodingSet:
       type: "array"
       xml:
         name: "queryset"
@@ -68,10 +100,10 @@ definitions:
       items:
         $ref: "#/definitions/GHObject"
         
-  GHObject:
+  GeocodingQuery:
       type: "object"
       xml:
-        name: "geohistorical-object"
+        name: "geocoding-query"
       required:
         - "address"
         - "date"

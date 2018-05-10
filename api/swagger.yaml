@@ -12,23 +12,54 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 host: "localhost:8080"
-basePath: "/api"
+basePath: "/"
 tags:
 - name: "geocoding"
   description: "Geocode a set of pairs <Address, Date>."
   externalDocs:
     description: "Find out more"
-    url: "http://geohistoricaldata.org/api/docs/geocoding"
+    url: "http://api.geohistoricaldata.org/docs"
 schemes:
 - "http"
 paths:
   /geocoding:
-    post:
+    get:
       tags:
-      - "geocoding"
+      - "Geocoding"
       summary: "Geocode an adress at a given date."
       description: "Some description."
-      operationId: "geocode"
+      operationId: "geocodeGET"
+      parameters:
+        - in: "query"
+          name: "address"
+          type: "string"
+          default: "12 rue du temple"
+        - in: "query"
+          name: "date"
+          type: "integer"
+          default: 1850
+        - in: "query"          
+          name: precision
+          type: "boolean"
+          default: true
+        - in: query
+          name: "maxresults"
+          type: "integer"
+          default: 1
+      responses:
+        200:
+          description: "Success"
+        400:
+          description: "Bad request"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "Geocoding"
+    post:
+      tags:
+      - "Geocoding"
+      summary: "Geocode a set of addresses at a given date."
+      description: "Some description."
+      operationId: "geocodePOST"
       consumes:
       - "application/json"
       produces:
@@ -38,7 +69,9 @@ paths:
         name: "body"
         required: false
         schema:
-          $ref: "#/definitions/GeocodingQuerySet"
+          type: "array"
+          items:
+            $ref: "#/definitions/GeocodingQuery"
       responses:
         200:
           description: "Success"
@@ -58,11 +91,8 @@ definitions:
         format: "int32"
       message:
         type: "string"
-  GeocodingQuerySet:
-    type: "array"
-    items:
-      $ref: "#/definitions/GHObject"
-  GHObject:
+
+  GeocodingQuery:
     type: "object"
     required:
     - "address"

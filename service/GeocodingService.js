@@ -4,15 +4,11 @@ const db = require('../db');
 const sql = require('../db/prepared-sql');
 
 /**
- * Geocode an adress at a given date.
- * Some description.
- *
- * body List  (optional)
- * no response value expected for this operation
- **/
-exports.geocode = function(body) {
+ * Geocode a set of addresses
+**/
+exports.batchGeocoding = function(addrSet) {
   return db.tx('geocoding-transaction', t => {
-    let queries = body.map(q => t.any(sql.geocodeAddress,{
+    let queries = addrSet.map(q => t.any(sql.geocodeAddress,{
             query_addr: q.address,
             query_date: q.date,
             do_precise_geocoding: q.precision,
@@ -26,4 +22,17 @@ exports.geocode = function(body) {
   });
 }
 
+/**
+* Geocode a single adress sent with GET
+**/
+exports.singleGeocoding = function(address,date,precision,maxresults) {
+  return db.any(sql.geocodeAddress,
+    {
+       query_addr: address,
+        query_date: date,
+        do_precise_geocoding: precision,
+        max_results: maxresults  
+    }
+  )
+}
 
