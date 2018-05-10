@@ -61,23 +61,12 @@ Supprimer une source geohistorique.
 Action : DELETE
 Route : /id/source/{id}
 
-### GeocodingSet.
-#### CREATE
-Géocoder + stocker en cache
+### Geocoding.
+#### Executer un géocodage
+En batch : 
 Action : POST
 Route : /geocoding
 
-#### READ
-Récupérer les résultats en cache
+Requete simple : 
 Action : GET
-Route : /id/geocoding/{id}
-
-#### UPDATE
-Mise à jour d'un résultat de géocodage après correction
-Action : PUT
-Route : /id/geocoding/{id}
-
-#### DELETE
-Supprimer les résultats en base
-Action : DELETE
-Route : /id/geocoding/{id}
+Route : /geocoding
