@@ -12,6 +12,7 @@ const config = {
     database: 'test',
     user: 'postgres',
     password: 'GHDB_postgres_admin',
+    ssl: true
 };
 
 // Load and initialize pg-promise:
