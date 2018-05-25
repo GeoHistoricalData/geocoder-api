@@ -1,6 +1,28 @@
 # Historical geocoding API
 
-URL : geohistoricaldata.org/api
+URL : api.geohistoricaldata.org/docs
+
+## Getting started
+
+1. La connexion à la base de données PostgreSQL s'appuie sur un fichier de configuration JSON à créer dans le dossier `config/`. Le fichier sera chargé par NodeJS au lancement selon les règles décrites dans https://github.com/lorenwest/node-config/wiki/Configuration-Files .
+
+Par exemple : 
+```json5
+{
+  GeocoderDB: {
+    dbConfig:{
+      host:"localhost",
+      port:5432,
+      database:"mydb",
+      user:"user",
+      password:"password"
+    }
+  }
+}
+```
+
+2. `npm start` pour lancer le serveur
+
 ## Services
 
 - Géocodage simple : 1 adresse = N résultats. 
