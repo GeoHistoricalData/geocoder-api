@@ -3,3 +3,6 @@ node_modules/
 
 # The file storing the prepared queries is generated automatically when the server starts.
 db/prepared-sql.js
+
+# Never track local configuration files
+config/local-*.*

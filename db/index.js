@@ -1,27 +1,19 @@
 'use strict';
 
+const config = require('config');
 const promise = require('bluebird');
 
 const initOptions = {
     promiseLib: promise,
 };
 
-const config = {
-    host: '176.31.187.44',
-    port: 5433,
-    database: 'test',
-    user: 'postgres',
-    password: 'GHDB_postgres_admin',
-    ssl: true
-};
+const dbConfig = config.get('GeocoderDB.dbConfig');
 
 // Load and initialize pg-promise:
 const pgp = require('pg-promise')(initOptions);
 
-
 // Create the database instance:
-const db = pgp(config);
-
+const db = pgp(dbConfig);
 
 const sqlConfig = {
   "dir": "./db/sql",
