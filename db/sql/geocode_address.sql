@@ -17,7 +17,7 @@ SELECT rank::text,
           historical_geocoding.round(number_distance::float,3) AS number_distance,
           historical_geocoding.round(scale_distance::float,3) AS scale_distance,
           historical_geocoding.round(spatial_distance::float,3) AS spatial_distance  
-    FROM historical_geocoding.geocode_name_foolproof(
+    FROM historical_geocoding.geocode_name_base(
                                                       query_adress:=$<query_addr>,
                                                       query_date:= sfti_makesfti($<query_date>::integer),
                                                       use_precise_localisation:= $<do_precise_geocoding>::integer::boolean ,

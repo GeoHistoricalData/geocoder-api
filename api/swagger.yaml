@@ -34,6 +34,7 @@ paths:
           name: "address"
           type: "string"
           default: "12 rue du temple"
+          allowEmptyValue: false
         - in: "query"
           name: "date"
           type: "integer"
@@ -42,10 +43,14 @@ paths:
           name: precision
           type: "boolean"
           default: true
+          allowEmptyValue: false
         - in: query
           name: "maxresults"
           type: "integer"
           default: 1
+          minimum: 1
+          maximum: 10
+          allowEmptyValue: false
       responses:
         200:
           description: "Success"
@@ -113,6 +118,8 @@ definitions:
       maxresults:
         type: "integer"
         example: 1
+        minimum: 1
+        maximum: 10
         xml:
           name: "max-results"
     xml:
