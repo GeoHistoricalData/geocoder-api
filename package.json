@@ -2,6 +2,10 @@
   "name": "historical-geocoder-api",
   "version": "1.0.0",
   "description": "Historical geocoder API.  You can find out more at [http://geohistoricaldata.org](http://geohistoricaldata.org).",
+  "licenses":[{
+        "type" : "AGPL",
+        "url" : "http://www.gnu.org/licenses/agpl.html"
+  }],
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
